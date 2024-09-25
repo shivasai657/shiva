@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANISHA Word Puzzle Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const clues = [
+            { text: "I am the first vowel in the alphabet.", letter: "A" },
+            { text: "I appear twice in 'MISSISSIPPI'.", letter: "I" },
+            { text: "I'm the 14th letter of the alphabet.", letter: "N" },
+            { text: "I make a shushing sound.", letter: "SH" },
+            { text: "I am the only vowel that appears twice in this name.", letter: "A" }
+        ];
+
+        const WordPuzzleGame = () => {
+            const [currentClueIndex, setCurrentClueIndex] = React.useState(0);
+            const [guess, setGuess] = React.useState('');
+            const [message, setMessage] = React.useState('');
+            const [gameWon, setGameWon] = React.useState(false);
+
+            const handleGuess = () => {
+                if (guess.toLowerCase() === 'anisha') {
+                    setMessage('Congratulations! You\'ve solved the puzzle!');
+                    setGameWon(true);
+                } else {
+                    setMessage('Not quite. Try again!');
+                    if (currentClueIndex < clues.length - 1) {
+                        setCurrentClueIndex(currentClueIndex + 1);
+                    }
+                }
+                setGuess('');
+            };
+
+            return (
+                <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
+                    <h1 className="text-2xl font-bold mb-4 text-center">Word Puzzle: Discover the Hidden Name</h1>
+                    
+                    {!gameWon && (
+                        <>
+                            <div className="mb-4">
+                                <h2 className="text-xl font-semibold mb-2">Clue {currentClueIndex + 1}:</h2>
+                                <p className="text-lg">{clues[currentClueIndex].text}</p>
+                            </div>
+                            
+                            <div className="mb-4">
+                                <input
+                                    type="text"
+                                    value={guess}
+                                    onChange={(e) => setGuess(e.target.value)}
+                                    placeholder="Enter your guess"
+                                    className="w-full p-2 border rounded"
+                                />
+                            </div>
+                            
+                            <button
+                                onClick={handleGuess}
+                                className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                            >
+                                Submit Guess
+                            </button>
+                        </>
+                    )}
+                    
+                    {message && (
+                        <div className={`mt-4 p-4 rounded ${gameWon ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                            <p className="font-bold">{gameWon ? "Success!" : "Incorrect"}</p>
+                            <p>{message}</p>
+                        </div>
+                    )}
+                    
+                    {gameWon && (
+                        <div className="mt-4 text-center">
+                            <svg className="h-16 w-16 text-green-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p className="text-xl font-bold mt-2">Well done!</p>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        ReactDOM.render(<WordPuzzleGame />, document.getElementById('root'));
+    </script>
+</body>
+</html>
